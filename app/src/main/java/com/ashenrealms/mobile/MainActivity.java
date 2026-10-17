@@ -9,7 +9,7 @@ import java.util.*;
 public class MainActivity extends Activity {
     @Override public void onCreate(Bundle b) { super.onCreate(b); getWindow().getDecorView().setSystemUiVisibility(5894 | 1024 | 512); setContentView(new GameView()); }
 
-    static class GameView extends View {
+    class GameView extends View {
         Paint p = new Paint(3); Random rand = new Random();
         float px=0, py=0, vx=0, vy=0; int hp=100, xp=0, level=1, gold=0, potions=3, kills=0;
         long last=System.currentTimeMillis(), attackUntil=0, hurtUntil=0;
