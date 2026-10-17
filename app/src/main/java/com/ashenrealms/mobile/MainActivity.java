@@ -16,7 +16,7 @@ public class MainActivity extends Activity {
     class GameView extends View {
         Paint p = new Paint(Paint.ANTI_ALIAS_FLAG);
         Random rand = new Random(7);
-        float px=0, py=0, joyDX=0, joyDY=0, scale=1, cx, cy;
+        float px=0, py=0, joyDX=0, joyDY=0, scale=1, cx, cy, joyOriginX, joyOriginY;
         int hp=100, xp=0, level=1, gold=0, potions=3, kills=0;
         long last=System.currentTimeMillis(), attackUntil=0, hurtUntil=0;
         ArrayList<Wraith> foes = new ArrayList<>();
@@ -141,14 +141,14 @@ public class MainActivity extends Activity {
                 if(hp<=0){hp=100;px=py=0;invalidate();return true;}
                 if(x>w-150*scale&&y>h-145*scale){attack();return true;}
                 if(x>w-150*scale&&y>h-240*scale&&y<h-145*scale){if(potions>0&&hp<100){hp=Math.min(100,hp+40);potions--;}invalidate();return true;}
-                if(x<w*.34f&&y>h*.52f){joy=true;joyPointer=e.getPointerId(idx);updateJoy(x,y);}
+                if(x<w*.48f&&y>h*.42f){joy=true;joyPointer=e.getPointerId(idx);joyOriginX=x;joyOriginY=y;updateJoy(x,y);}
                 return true;
             }
             if(a==MotionEvent.ACTION_MOVE&&joy){int i=e.findPointerIndex(joyPointer);if(i>=0)updateJoy(e.getX(i),e.getY(i));return true;}
             if(a==MotionEvent.ACTION_UP||a==MotionEvent.ACTION_POINTER_UP||a==MotionEvent.ACTION_CANCEL){if(e.getPointerId(idx)==joyPointer){joy=false;joyDX=joyDY=0;}return true;}
             return true;
         }
-        void updateJoy(float x,float y){float dx=x-88*scale,dy=y-(getHeight()-91*scale),len=(float)Math.hypot(dx,dy),max=55*scale;if(len>max){dx*=max/len;dy*=max/len;}joyDX=dx/max;joyDY=dy/max;}
+        void updateJoy(float x,float y){float dx=x-joyOriginX,dy=y-joyOriginY,len=(float)Math.hypot(dx,dy),max=55*scale;if(len>max){dx*=max/len;dy*=max/len;}joyDX=dx/max;joyDY=dy/max;invalidate();}
         void attack(){
             long now=System.currentTimeMillis();attackUntil=now+260;
             for(Wraith s:foes)if(Math.hypot(s.x-px,s.y-py)<105){s.hp-=22;if(s.hp<=0){s.x=px+(rand.nextFloat()-.5f)*750;s.y=py+(rand.nextFloat()-.5f)*550;s.hp=42;xp+=20;gold+=7;kills++;if(xp>=level*70){xp-=level*70;level++;hp=100;}if(kills>=5)kills=5;}}
