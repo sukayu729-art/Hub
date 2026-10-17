@@ -18,7 +18,7 @@ public class MainActivity extends Activity {
         boolean attack=false; float scale, cx, cy;
         String quest="Defeat 5 slimes";
         GameView(){ super(MainActivity.this); setFocusable(true); for(int i=0;i<5;i++) slimes.add(new Slime((rand.nextFloat()-.5f)*700,(rand.nextFloat()-.5f)*400)); }
-        static class Slime { float x,y,hp=30; Slime(float a,float b){x=a;y=b;} }
+        class Slime { float x,y,hp=30; Slime(float a,float b){x=a;y=b;} }
         void text(Canvas c,String s,float x,float y,float size,int color){p.setColor(color);p.setTextSize(size);p.setTypeface(Typeface.create("sans-serif",Typeface.BOLD));c.drawText(s,x,y,p);}
         protected void onDraw(Canvas c){
             super.onDraw(c); float w=getWidth(),h=getHeight(); scale=Math.min(w/900f,h/500f); cx=w/2;cy=h/2;
